@@ -11,7 +11,7 @@ from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSeria
 from .permissions import IsOwnerOrReadOnly
 
 class PledgeList(APIView):
-
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         pledges = Pledge.objects.all()
         order_by = request.query_params.get('order_by', None)
