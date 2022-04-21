@@ -132,3 +132,11 @@ class CategoryList(APIView):
         many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
