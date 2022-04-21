@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-6f5fiv53l$d=%d_0_8&znvd!6&d3rfy-qowzswx^u)i-p_dsm6' CHANGE SECRETKEY
 SECRET_KEY = os.environ.get( 
     'DJANGO_SECRET_KEY', 
-    '5*15pt5log&-bjpkqo0117!b!x4do-mgmxvg8n$3016384zz(7' 
+    'o5-2wl%apnwme(=c7wal17$ro(9dm8coo(u_h^zh^+@d8j47_^' 
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'projects.apps.ProjectsConfig',
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,7 +66,7 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
