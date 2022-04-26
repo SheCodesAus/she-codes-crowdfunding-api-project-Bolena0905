@@ -4,7 +4,7 @@ from unittest.util import _MAX_LENGTH
 from django.db.models import Sum
 from django.forms import SlugField
 from rest_framework import serializers
-from .models import Project, Pledge, Category
+from .models import Project, Pledge, Category, Comment
 
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -25,16 +25,16 @@ class ProjectSerializer(serializers.Serializer):
     goal = serializers.IntegerField()
     image = serializers.URLField()
     is_open = serializers.BooleanField()
-    # date_created = serializers.DateTimeField()
-    date_created = serializers.ReadOnlyField()
+    date_created = serializers.DateTimeField()
+    # date_created = serializers.ReadOnlyField()
     # owner = serializers.CharField(max_length=200)
     owner = serializers.ReadOnlyField(source='owner.id')
     total_pledged = serializers.SerializerMethodField()
+    pledges = PledgeSerializer(many=True, read_only=True)
 
     # For the category
-    category = serializers.SlugRelatedField(
-        slug_field='slug', 
-        queryset=Category.objects.all()
+    category = serializers.SlugRelatedField(slug_field='slug', queryset=Category.objects.all()
+
     )
     # pledges = PledgeSerializer(many=True, read_only=True)
 
@@ -47,9 +47,29 @@ class ProjectSerializer(serializers.Serializer):
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
 
+class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field="username",
+        read_only="true",
+    )
+    
+    class Meta:
+        model = Comment
+        exclude = ["visible"]
+    class ProjectCommentSerializer(serializers.ModelSerializer):
+        author = serializers.SlugRelatedField(
+            slug_field="username",
+            read_only="true",
+        )
+    
+    class Meta:
+        model = Comment
+        exclude = ["visible", "project"]
+
 
 class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
@@ -59,8 +79,7 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.is_open = validated_data.get('is_open', instance.is_open)
         instance.date_created = validated_data.get('date_created', instance.date_created)
         instance.owner = validated_data.get('owner', instance.owner)
-        instance.category = validated_data.get('category',
-        instance.category)
+        instance.category = validated_data.get('category', instance.category)
         instance.save()
         return instance
 
@@ -72,3 +91,13 @@ class CategorySerializer(serializers.Serializer):
     def create(self, validated_data):
         return Category.objects.create(**validated_data)
     
+class CategoryDetailSerializer(CategorySerializer):
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.slug = validated_data.get('slug', instance.slug)
+        instance.save()
+        return instance
+
+
+
+
