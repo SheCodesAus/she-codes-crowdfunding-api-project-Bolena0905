@@ -4,12 +4,12 @@ from django.db import models
 # Create your models here.
 # FOR CATEGORY
 
-User = get_user_model()
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    class Meta:
-         abstract = True
+# User = get_user_model()
+# class BaseModel(models.Model):
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     modified_at = models.DateTimeField(auto_now=True)
+#     class Meta:
+#          abstract = True
 
 class Category(models.Model):
     category_name = models.CharField(max_length=200)
@@ -31,7 +31,8 @@ class Project(models.Model):
 #relationship between category & project
     category= models.ForeignKey(
         'Category',
-        null=True, blank=True,
+        null=True, 
+        blank=True,
         on_delete=models.CASCADE,
         related_name='project_id'
     )
@@ -53,16 +54,16 @@ class Pledge(models.Model):
         related_name='supporter_pledges'
     )
 
-    def save(self, **kwargs):
-        super().save(**kwargs)
-        self.supporter.badge_check('supporter_pledges')
+    # def save(self, **kwargs):
+    #     super().save(**kwargs)
+    #     self.supporter.badge_check('supporter_pledges')
 
 
-class Comment(BaseModel):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="comments")
-    body = models.TextField()
-    visible = models.BooleanField(default=True)
+# class Comment(BaseModel):
+#     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments")
+#     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="comments")
+#     body = models.TextField()
+#     visible = models.BooleanField(default=True)
 
 
 

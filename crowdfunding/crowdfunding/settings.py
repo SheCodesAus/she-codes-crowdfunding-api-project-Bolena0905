@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import dj_database_url
 import os
+import dj_database_url
+
 
 
 
@@ -39,8 +40,6 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 
-
-
 # Application definition
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -64,6 +63,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
